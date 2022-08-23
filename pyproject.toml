@@ -43,15 +43,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 
-[tool.setuptools.package-data]
-"rail.examples.estimation.configs" = ["*.columns"]
-"rail.examples.estimation.data.FILTER" = ["FILTER/DC2LSST_*"]
-"rail.examples.estimation.data.SED" = [
-    "*.sed",
-    "*.txt",
-    "CWWSB4.list",
-]
-
 [tool.coverage.run]
 source = ["src/rail"]
 branch = true
