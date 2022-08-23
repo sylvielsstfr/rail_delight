@@ -1,5 +1,5 @@
 [project]
-name = "rail-delight"
+name = "pz-rail-delight"
 description = "RAIL Delight Interface"
 readme = "README.rst"
 requires-python = ">=3.8"
@@ -20,7 +20,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-    "rail",
+    "pz-rail",
     "coloredlogs",
     "corner",
     "cython",
