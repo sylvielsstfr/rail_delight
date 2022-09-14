@@ -32,9 +32,9 @@ def test_delight():
     for pattern in ['rail/estimation/data/SED/ssp_*Myr_z008_fluxredshiftmod.txt',
                     'rail/estimation/data/SED/*_B2004a_fluxredshiftmod.txt',
                     'rail/estimation/data/FILTER/DC2LSST_*_gaussian_coefficients.txt',
-                    'examples/estimation/tmp/delight_data/galaxies*.txt',
+                    'rail/examples/estimation/tmp/delight_data/galaxies*.txt',
                     'parametersTest*.cfg']:
         files = glob.glob(pattern)
         for file_ in files:
             os.remove(file_)
-    os.removedirs('examples/estimation/tmp/delight_data')
+    os.removedirs('rail/examples/estimation/tmp/delight_data')
