@@ -24,15 +24,12 @@ import qp
 import os
 import errno
 
-import coloredlogs
 import logging
 
 # Filters and SED
 
 # Create a logger object.
 logger = logging.getLogger(__name__)
-
-coloredlogs.install(level='DEBUG', logger=logger, fmt='%(asctime)s,%(msecs)03d %(programname)s %(name)s[%(process)d] %(levelname)s %(message)s')
 
 
 class Inform_DelightPZ(CatInformer):
