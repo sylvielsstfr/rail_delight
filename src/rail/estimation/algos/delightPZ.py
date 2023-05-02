@@ -95,8 +95,6 @@ class Inform_DelightPZ(CatInformer):
         self.chunknum = 0
         self.delightparamfile = self.config['delightparamfile']
 
-        np.random.seed(87)
-
     def inform(self, training_data):
         """Override the inform method because Delight doesn't have a model to return
 
