@@ -26,18 +26,18 @@ run_params:
 #-----------------------------------------------
 # Delight input data (Filters and SED templates), note Delight will write inside this directory
 # example recommended:
-# - DC2 mode : dlght_inputdata: "./src/rail/examples/estimation/tmp/delight_indata"
-# - tutorial mode : dlght_inputdata: "./src/rail/examples/estimation/tmpsim/delight_indata"
+# - DC2 mode : dlght_inputdata: "./src/rail/examples_data/estimation_data/tmp/delight_indata"
+# - tutorial mode : dlght_inputdata: "./src/rail/examples_data/estimation_data/tmpsim/delight_indata"
 #----------------------------------------------
-  dlght_inputdata: "./src/rail/examples/estimation/tmp/delight_indata"
+  dlght_inputdata: "./src/rail/examples_data/estimation_data/tmp/delight_indata"
 #---------------------------------------
 # temporary directory for delight work
 # example recommended:
-# - DC2 mode : tempdir: "./tmp" and tempdatadir: "./src/rail/examples/estimation/tmp/delight_data"
+# - DC2 mode : tempdir: "./tmp" and tempdatadir: "./src/rail/examples_data/estimation_data/tmp/delight_data"
 # - tutorial mode : tempdir: "./tmpsim" and tempdatadir: "./tmpsim/delight_data"
 #---------------------------------------
-  tempdir: "./src/rail/examples/estimation/tmp"
-  tempdatadir: "./src/rail/examples/estimation/tmp/delight_data"
+  tempdir: "./src/rail/examples_data/estimation_data/tmp"
+  tempdatadir: "./src/rail/examples_data/estimation_data/tmp/delight_data"
 #----------------------------------------
 # delight configuration file filename
 #----------------------------------------
