@@ -20,7 +20,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-    "pz-rail",
+    "pz-rail-base",
     "coloredlogs",
     "corner",
     "cython",
@@ -29,6 +29,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "qp-prob[full]",
     "coverage",
     "pylint",
     "pytest",
