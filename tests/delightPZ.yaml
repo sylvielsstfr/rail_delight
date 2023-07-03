@@ -1,6 +1,6 @@
 ##########################################################################################
 #
-# RAIL configuration file for delightPZ module
+# RAIL configuration file for delight_hybrid module
 #
 # Steering Delight from RAIL
 # Used on Vera C. Rubin LSST only estimation
@@ -12,8 +12,8 @@
 #
 ############################################################################################
 run_params:
-#  class_name: delightPZ
-#  run_name: test_delightPZ
+#  class_name: DelightEstimator
+#  run_name: test_DelightEstimator
 #------------------------------------------------
 # redshift range and binning for delight
 # dlght_ prepend means a parameter used by Delight

@@ -32,11 +32,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Inform_DelightPZ(CatInformer):
+class DelightInformer(CatInformer):
     """Train the Delight code, outputs are actually saved to files,
     which is fairly non-standard way currently
     """
-    name = 'Inform_DelightPZ'
+    name = 'DelightInformer'
     outputs = []
     config_options = CatInformer.config_options.copy()
     config_options.update(dlght_redshiftMin=Param(float, 0.01, msg='min redshift'),
@@ -175,12 +175,12 @@ class Inform_DelightPZ(CatInformer):
         delightLearn(self.delightparamfile)
 
 
-class delightPZ(CatEstimator):
+class DelightEstimator(CatEstimator):
     """Run the delight scripts from the LSSTDESC fork of Delight
        Still has the ascii writeout stuff, so intermediate files are
        created that need to be cleaned up in the future
     """
-    name = 'delightPZ'
+    name = 'DelightEstimator'
     inputs = [('input', TableHandle)]
     config_options = CatEstimator.config_options.copy()
     config_options.update(dlght_redshiftMin=Param(float, 0.01, msg='min redshift'),
