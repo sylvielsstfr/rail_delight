@@ -10,20 +10,20 @@ import rail
 from rail.core.stage import RailStage
 from rail.core.data import DataStore, TableHandle
 from rail.core.algo_utils import one_algo
-from rail.estimation.algos import delightPZ
+from rail.estimation.algos import delight_hybrid
 import scipy.special
 sci_ver_str = scipy.__version__.split('.')
 
 
-@pytest.mark.skipif('rail.estimation.algos.delightPZ' not in sys.modules,
-                    reason="delightPZ not installed!")
+@pytest.mark.skipif('rail.estimation.algos.delight_hybrid' not in sys.modules,
+                    reason="delight_hybrid not installed!")
 def test_delight():
     with open("./tests/delightPZ.yaml", "r") as f:
         config_dict = yaml.safe_load(f)
     config_dict['model_file'] = "None"
     config_dict['hdf5_groupname'] = 'photometry'
-    train_algo = delightPZ.Inform_DelightPZ
-    pz_algo = delightPZ.delightPZ
+    train_algo = delight_hybrid.DelightInformer
+    pz_algo = delight_hybrid.DelightEstimator
     results, rerun_results, rerun3_results = one_algo("Delight", train_algo, pz_algo, config_dict, config_dict)
     zb_expected = np.array([0.18, 0.01, -1., -1., 0.01, -1., -1., -1., 0.01, 0.01])
     assert np.isclose(results.ancil['zmode'], zb_expected, atol=0.03).all()
