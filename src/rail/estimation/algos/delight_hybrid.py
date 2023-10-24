@@ -196,7 +196,7 @@ class DelightEstimator(CatEstimator):
                           bands_verbose=Param(bool, True, msg='verbose'),
                           bands_makeplots=Param(bool, False, msg='bool for whether to make approx band plots'),
                           bands_debug=Param(bool, True, msg='debug flag for filters'),
-                          tempdir=Param(str,  "rail/examples_data/estimation_data/tmp", msg='temp dir'),
+                          tempdir=Param(str, "rail/examples_data/estimation_data/tmp", msg='temp dir'),
                           tempdatadir=Param(str, "rail/examples_data/estimation_data/tmp/delight_data", msg='temp data dir'),
                           sed_path=Param(str, os.path.join(RAILDIR, "rail/examples_data/estimation_data/data/SED"), msg='path to SED dir'),
                           sed_name_list=Param(str, "El_B2004a Sbc_B2004a Scd_B2004a SB3_B2004a SB2_B2004a Im_B2004a ssp_25Myr_z008 ssp_5Myr_z008", msg='String with list of all SED names, with no file extension'),
@@ -247,7 +247,6 @@ class DelightEstimator(CatEstimator):
         do anything here for now.
         """
         return
-
 
     def _process_chunk(self, start, end, data, first):
 
