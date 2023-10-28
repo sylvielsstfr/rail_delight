@@ -25,7 +25,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-"qp-prob[full]",
+    "qp-prob[full]",
     "coverage",
     "pylint",
     "pytest",
