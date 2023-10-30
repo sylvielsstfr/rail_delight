@@ -18,7 +18,7 @@ sci_ver_str = scipy.__version__.split('.')
 @pytest.mark.skipif('rail.estimation.algos.delight_hybrid' not in sys.modules,
                     reason="delight_hybrid not installed!")
 def test_delight():
-    with open("./tests/delightPZ.yaml", "r") as f:
+    with open("./tests/delight/delightPZ.yaml", "r") as f:
         config_dict = yaml.safe_load(f)
     config_dict['model_file'] = "None"
     config_dict['hdf5_groupname'] = 'photometry'
