@@ -9,7 +9,7 @@ import tables_io
 import rail
 from rail.core.stage import RailStage
 from rail.core.data import DataStore, TableHandle
-from rail.core.algo_utils import one_algo
+from rail.utils.algo_utils import one_algo
 from rail.estimation.algos import delight_hybrid
 import scipy.special
 sci_ver_str = scipy.__version__.split('.')
