@@ -17,7 +17,7 @@ import numpy as np
 from ceci.config import StageParameter as Param
 from rail.estimation.estimator import CatEstimator, CatInformer
 from rail.core.data import TableHandle
-from rail.core.utils import RAILDIR
+from rail.utils.path_utils import RAILDIR
 
 import qp
 
