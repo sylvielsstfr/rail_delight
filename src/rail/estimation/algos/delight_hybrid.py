@@ -87,10 +87,10 @@ class DelightInformer(CatInformer):
 
     outputs = []
 
-    def __init__(self, args, comm=None):
+    def __init__(self, args, **kwargs):
         """ Constructor
         Do CatInformer specific initialization, then check on bands """
-        CatInformer.__init__(self, args, comm=comm)
+        super().__init__(self, args, **kwargs)
         # counter on the chunk validation dataset
         self.chunknum = 0
         self.delightparamfile = self.config['delightparamfile']
@@ -229,10 +229,10 @@ class DelightEstimator(CatEstimator):
                           V_L=Param(float, 0.1, msg="prior param"),
                           lineWidthSigma=Param(float, 20, msg="prior param"))
 
-    def __init__(self, args, comm=None):
+    def __init__(self, args, **kwargs):
         """ Constructor:
         Do CatEstimator specific initialization """
-        CatEstimator.__init__(self, args, comm=comm)
+        super().__init__(self, args, **kwargs)
         self.delightparamfile = self.config['delightparamfile']
         self.chunknum = 0
         self.delightindata = self.config['dlght_inputdata']
