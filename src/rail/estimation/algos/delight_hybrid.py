@@ -90,7 +90,7 @@ class DelightInformer(CatInformer):
     def __init__(self, args, **kwargs):
         """ Constructor
         Do CatInformer specific initialization, then check on bands """
-        super().__init__(self, args, **kwargs)
+        super().__init__(args, **kwargs)
         # counter on the chunk validation dataset
         self.chunknum = 0
         self.delightparamfile = self.config['delightparamfile']
@@ -232,7 +232,7 @@ class DelightEstimator(CatEstimator):
     def __init__(self, args, **kwargs):
         """ Constructor:
         Do CatEstimator specific initialization """
-        super().__init__(self, args, **kwargs)
+        super().__init__(args, **kwargs)
         self.delightparamfile = self.config['delightparamfile']
         self.chunknum = 0
         self.delightindata = self.config['dlght_inputdata']
