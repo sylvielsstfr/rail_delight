@@ -283,6 +283,9 @@ class DelightEstimator(CatEstimator):
         delightparamfilechunk = os.path.join(dirn, basnchunk)
         logger.debug("parameter file for delight :%s", delightparamfilechunk)
 
+        d = data['redshift']
+        numzs = len(d)
+
         # save the config parameter file for the data chunk that Delight needs
         with open(delightparamfilechunk, 'w') as out:
             out.write(paramfile_txt)
@@ -292,25 +295,27 @@ class DelightEstimator(CatEstimator):
                                           flag_filter_validation=self.flag_filter_validation,
                                           snr_cut_validation=self.snr_cut_validation)
 
+       
         # template fitting for that chunk
         templateFitting(delightparamfilechunk)
 
         # estimation for that chunk
         delightApply(delightparamfilechunk)
-
-        # allow for either format for now
-        try:
-            d = data['i_mag']
-        except Exception:
-            d = data['mag_i_lsst']
-
-        numzs = len(d)
+    
 
         zmode, pdfs = getDelightRedshiftEstimation(delightparamfilechunk,
                                                    self.chunknum, numzs, indexes_sel)
         zmode = np.round(zmode, 3)
 
-        qp_d = qp.Ensemble(qp.interp, data=dict(xvals=self.zgrid,
+        try:
+            qp_d = qp.Ensemble(qp.interp, data=dict(xvals=self.zgrid,
                                                 yvals=pdfs))
+        except Exception as inst:
+            print(">>>> Exception ::",type(inst))    # the exception type
+            print(">>>> Exception ::",inst.args)     # arguments stored in .args
+            print(">>>> Exception ::",inst)   
+            qp_d = qp.Ensemble(qp.interp, data=dict(xvals=self.zgrid,
+                                                yvals=np.zeros(len(self.zgrid)))) 
+
         qp_d.set_ancil(dict(zmode=zmode))
         self._do_chunk_output(qp_d, start, end, first)
