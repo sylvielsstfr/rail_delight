@@ -9,7 +9,7 @@ Author        : Sylvie Dagoret-Campagne, Sam Schmidt, others
 Affiliation   : IJCLab/IN2P3/CNRS/France
 Creation date : March 2021
 Last update   : October 21th 2021
-Last update   : February 25th 2022
+Last update   : November 1st 2024
 """
 
 import sys
@@ -117,7 +117,7 @@ class DelightInformer(CatInformer):
         from delight.interfaces.rail.processSEDs import processSEDs  # build a redshift -flux grid model
         from delight.interfaces.rail.makeConfigParam import makeConfigParam  # build the parameter file required by Delight
         from delight.interfaces.rail.convertDESCcat import convertDESCcatTrainData
-        from delight.interfaces.rail.delightLearn import delightLearn
+        from delight.interfaces.rail.delightLearn import delightLearn,delightLearnh5
 
         try:
             if not os.path.exists(self.config['tempdir']):
@@ -173,6 +173,7 @@ class DelightInformer(CatInformer):
 
         # Learn with Gaussian processes
         delightLearn(self.delightparamfile)
+        delightLearnh5(self.delightparamfile)
 
 
 class DelightEstimator(CatEstimator):
@@ -252,9 +253,9 @@ class DelightEstimator(CatEstimator):
 
         from delight.interfaces.rail.makeConfigParam import makeConfigParam
         from delight.interfaces.rail.convertDESCcat import convertDESCcatChunk
-        from delight.interfaces.rail.templateFitting import templateFitting
-        from delight.interfaces.rail.delightApply import delightApply
-        from delight.interfaces.rail.getDelightRedshiftEstimation import getDelightRedshiftEstimation
+        from delight.interfaces.rail.templateFitting import templateFitting,templateFittingh5
+        from delight.interfaces.rail.delightApply import delightApply,delightApplyh5
+        from delight.interfaces.rail.getDelightRedshiftEstimation import getDelightRedshiftEstimation,getDelightRedshiftEstimationh5
 
         print("\n\n\n Starting estimation...\n\n\n")
         self.chunknum += 1
@@ -293,10 +294,12 @@ class DelightEstimator(CatEstimator):
                                           snr_cut_validation=self.snr_cut_validation)
 
         # template fitting for that chunk
-        templateFitting(delightparamfilechunk)
+        #templateFitting(delightparamfilechunk)
+        templateFittingh5(delightparamfilechunk)
 
         # estimation for that chunk
-        delightApply(delightparamfilechunk)
+        #delightApply(delightparamfilechunk)
+        delightApplyh5(delightparamfilechunk)
 
         # allow for either format for now
         try:
@@ -306,7 +309,7 @@ class DelightEstimator(CatEstimator):
 
         numzs = len(d)
 
-        zmode, pdfs = getDelightRedshiftEstimation(delightparamfilechunk,
+        zmode, pdfs = getDelightRedshiftEstimationh5(delightparamfilechunk,
                                                    self.chunknum, numzs, indexes_sel)
         zmode = np.round(zmode, 3)
 
