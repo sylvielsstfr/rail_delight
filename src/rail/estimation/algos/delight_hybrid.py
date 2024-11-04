@@ -71,10 +71,6 @@ class DelightInformer(CatInformer):
                           target_refband=Param(str, "DC2LSST_r", msg="the reference band for the taret data"),
                           target_fracfluxerr=Param(float, 1.e-4, msg="extra fractional error to add to target fluxes?"),
                           delightparamfile=Param(str, "parametersTest.cfg", msg="param file name"),
-                          flag_filter_training=Param(bool, True, msg="?"),
-                          snr_cut_training=Param(float, 5, msg="SNR training cut"),
-                          flag_filter_validation=Param(bool, True, msg="?"),
-                          snr_cut_validation=Param(float, 3, msg="validation SNR cut"),
                           dlght_inputdata=Param(str, os.path.join(RAILDIR, "rail/examples_data/estimation_data/tmp/delight_indata"), msg="input data directory for ascii data"),
                           zPriorSigma=Param(float, 0.2, msg="sigma for redshift prior"),
                           ellPriorSigma=Param(float, 0.5, msg="prior param"),
@@ -167,9 +163,8 @@ class DelightInformer(CatInformer):
             training_data = self.get_data('input')
 
         convertDESCcatTrainData(self.delightparamfile,
-                                training_data,
-                                flag_filter=self.config['flag_filter_training'],
-                                snr_cut=self.config['snr_cut_training'])
+                                training_data)
+                                
 
         # Learn with Gaussian processes
         delightLearn(self.delightparamfile)
@@ -216,10 +211,6 @@ class DelightEstimator(CatEstimator):
                           target_refband=Param(str, "DC2LSST_r", msg="the reference band for the taret data"),
                           target_fracfluxerr=Param(float, 1.e-4, msg="extra fractional error to add to target fluxes?"),
                           delightparamfile=Param(str, "parametersTest.cfg", msg="param file name"),
-                          flag_filter_training=Param(bool, True, msg="?"),
-                          snr_cut_training=Param(float, 5, msg="SNR training cut"),
-                          flag_filter_validation=Param(bool, True, msg="?"),
-                          snr_cut_validation=Param(float, 3, msg="validation SNR cut"),
                           dlght_inputdata=Param(str, os.path.join(RAILDIR, "rail/examples_data/estimation_data/tmp/delight_indata"), msg="input data directory for ascii data"),
                           zPriorSigma=Param(float, 0.2, msg="sigma for redshift prior"),
                           ellPriorSigma=Param(float, 0.5, msg="prior param"),
@@ -289,9 +280,8 @@ class DelightEstimator(CatEstimator):
             out.write(paramfile_txt)
 
         # convert the chunk data into the required  flux-redshift validation file for delight
-        indexes_sel = convertDESCcatChunk(delightparamfilechunk, data, self.chunknum,
-                                          flag_filter_validation=self.flag_filter_validation,
-                                          snr_cut_validation=self.snr_cut_validation)
+        convertDESCcatChunk(delightparamfilechunk, data, self.chunknum)
+                                          
 
         # template fitting for that chunk
         #templateFitting(delightparamfilechunk)
@@ -310,7 +300,7 @@ class DelightEstimator(CatEstimator):
         numzs = len(d)
 
         zmode, pdfs = getDelightRedshiftEstimationh5(delightparamfilechunk,
-                                                   self.chunknum, numzs, indexes_sel)
+                                                   self.chunknum, numzs)
         zmode = np.round(zmode, 3)
 
         qp_d = qp.Ensemble(qp.interp, data=dict(xvals=self.zgrid,
