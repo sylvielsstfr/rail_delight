@@ -228,8 +228,8 @@ class DelightEstimator(CatEstimator):
         self.delightparamfile = self.config['delightparamfile']
         self.chunknum = 0
         self.delightindata = self.config['dlght_inputdata']
-        self.flag_filter_validation = self.config['flag_filter_validation']
-        self.snr_cut_validation = self.config['snr_cut_validation']
+        #self.flag_filter_validation = self.config['flag_filter_validation']
+        #self.snr_cut_validation = self.config['snr_cut_validation']
         self.zgrid = np.arange(self.config['dlght_redshiftMin'], self.config['dlght_redshiftMax'], self.config['dlght_redshiftBinSize'])
 
     def open_model(self, **kwargs):
