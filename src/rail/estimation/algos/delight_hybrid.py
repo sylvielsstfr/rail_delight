@@ -299,8 +299,20 @@ class DelightEstimator(CatEstimator):
 
         numzs = len(d)
 
+        # there is no filtering if test data, thus no need to provide numz.
+        # note there are two evaluation one in Template Fitting and one in DelightApply.
+        # By now we return the Gaussian Process results
         zmode, pdfs = getDelightRedshiftEstimationh5(delightparamfilechunk,
-                                                   self.chunknum, numzs)
+                                                   self.chunknum,prefix="gp_pdfs_")
+
+        # but we could also ask for the Template fitting:
+        # zmode, pdfs = getDelightRedshiftEstimationh5(delightparamfilechunk,
+        #                                           self.chunknum,prefix="temp_pdfs_")    
+        # The selection between the two types of results may be done inside  
+        # getDelightRedshiftEstimationh5
+
+        # For the moment, we use GP only
+                                               
         zmode = np.round(zmode, 3)
 
         qp_d = qp.Ensemble(qp.interp, data=dict(xvals=self.zgrid,
