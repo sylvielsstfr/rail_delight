@@ -9,7 +9,7 @@ Author        : Sylvie Dagoret-Campagne, Sam Schmidt, others
 Affiliation   : IJCLab/IN2P3/CNRS/France
 Creation date : March 2021
 Last update   : October 21th 2021
-Last update   : February 25th 2022
+Last update   : November 1st 2024
 """
 
 import sys
@@ -70,11 +70,9 @@ class DelightInformer(CatInformer):
                           target_refbandorder=Param(str, "DC2LSST_u DC2LSST_u_var DC2LSST_g DC2LSST_g_var DC2LSST_r DC2LSST_r_var DC2LSST_i DC2LSST_i_var DC2LSST_z DC2LSST_z_var DC2LSST_y DC2LSST_y_var redshift", msg='order of reference bands for target data'),
                           target_refband=Param(str, "DC2LSST_r", msg="the reference band for the taret data"),
                           target_fracfluxerr=Param(float, 1.e-4, msg="extra fractional error to add to target fluxes?"),
+                          target_usecompression=Param(bool,False,msg="activate Evidence output files"), 
+                          target_ncompress=Param(int,10,msg="number of hightest evidence training components in evidences file"),
                           delightparamfile=Param(str, "parametersTest.cfg", msg="param file name"),
-                          flag_filter_training=Param(bool, True, msg="?"),
-                          snr_cut_training=Param(float, 5, msg="SNR training cut"),
-                          flag_filter_validation=Param(bool, True, msg="?"),
-                          snr_cut_validation=Param(float, 3, msg="validation SNR cut"),
                           dlght_inputdata=Param(str, os.path.join(RAILDIR, "rail/examples_data/estimation_data/tmp/delight_indata"), msg="input data directory for ascii data"),
                           zPriorSigma=Param(float, 0.2, msg="sigma for redshift prior"),
                           ellPriorSigma=Param(float, 0.5, msg="prior param"),
@@ -117,7 +115,7 @@ class DelightInformer(CatInformer):
         from delight.interfaces.rail.processSEDs import processSEDs  # build a redshift -flux grid model
         from delight.interfaces.rail.makeConfigParam import makeConfigParam  # build the parameter file required by Delight
         from delight.interfaces.rail.convertDESCcat import convertDESCcatTrainData
-        from delight.interfaces.rail.delightLearn import delightLearn
+        from delight.interfaces.rail.delightLearn import delightLearn,delightLearnh5
 
         try:
             if not os.path.exists(self.config['tempdir']):
@@ -167,12 +165,12 @@ class DelightInformer(CatInformer):
             training_data = self.get_data('input')
 
         convertDESCcatTrainData(self.delightparamfile,
-                                training_data,
-                                flag_filter=self.config['flag_filter_training'],
-                                snr_cut=self.config['snr_cut_training'])
+                                training_data)
+                                
 
         # Learn with Gaussian processes
         delightLearn(self.delightparamfile)
+        delightLearnh5(self.delightparamfile)
 
 
 class DelightEstimator(CatEstimator):
@@ -214,11 +212,9 @@ class DelightEstimator(CatEstimator):
                           target_refbandorder=Param(str, "DC2LSST_u DC2LSST_u_var DC2LSST_g DC2LSST_g_var DC2LSST_r DC2LSST_r_var DC2LSST_i DC2LSST_i_var DC2LSST_z DC2LSST_z_var DC2LSST_y DC2LSST_y_var redshift", msg='order of reference bands for target data'),
                           target_refband=Param(str, "DC2LSST_r", msg="the reference band for the taret data"),
                           target_fracfluxerr=Param(float, 1.e-4, msg="extra fractional error to add to target fluxes?"),
+                          target_usecompression=Param(bool,False,msg="activate Evidence output files"), 
+                          target_ncompress=Param(int,10,msg="number of hightest evidence training components in evidences file"),
                           delightparamfile=Param(str, "parametersTest.cfg", msg="param file name"),
-                          flag_filter_training=Param(bool, True, msg="?"),
-                          snr_cut_training=Param(float, 5, msg="SNR training cut"),
-                          flag_filter_validation=Param(bool, True, msg="?"),
-                          snr_cut_validation=Param(float, 3, msg="validation SNR cut"),
                           dlght_inputdata=Param(str, os.path.join(RAILDIR, "rail/examples_data/estimation_data/tmp/delight_indata"), msg="input data directory for ascii data"),
                           zPriorSigma=Param(float, 0.2, msg="sigma for redshift prior"),
                           ellPriorSigma=Param(float, 0.5, msg="prior param"),
@@ -236,8 +232,8 @@ class DelightEstimator(CatEstimator):
         self.delightparamfile = self.config['delightparamfile']
         self.chunknum = 0
         self.delightindata = self.config['dlght_inputdata']
-        self.flag_filter_validation = self.config['flag_filter_validation']
-        self.snr_cut_validation = self.config['snr_cut_validation']
+        #self.flag_filter_validation = self.config['flag_filter_validation']
+        #self.snr_cut_validation = self.config['snr_cut_validation']
         self.zgrid = np.arange(self.config['dlght_redshiftMin'], self.config['dlght_redshiftMax'], self.config['dlght_redshiftBinSize'])
 
     def open_model(self, **kwargs):
@@ -252,9 +248,9 @@ class DelightEstimator(CatEstimator):
 
         from delight.interfaces.rail.makeConfigParam import makeConfigParam
         from delight.interfaces.rail.convertDESCcat import convertDESCcatChunk
-        from delight.interfaces.rail.templateFitting import templateFitting
-        from delight.interfaces.rail.delightApply import delightApply
-        from delight.interfaces.rail.getDelightRedshiftEstimation import getDelightRedshiftEstimation
+        from delight.interfaces.rail.templateFitting import templateFitting,templateFittingh5
+        from delight.interfaces.rail.delightApply import delightApply,delightApplyh5
+        from delight.interfaces.rail.getDelightRedshiftEstimation import getDelightRedshiftEstimation,getDelightRedshiftEstimationh5
 
         print("\n\n\n Starting estimation...\n\n\n")
         self.chunknum += 1
@@ -288,15 +284,16 @@ class DelightEstimator(CatEstimator):
             out.write(paramfile_txt)
 
         # convert the chunk data into the required  flux-redshift validation file for delight
-        indexes_sel = convertDESCcatChunk(delightparamfilechunk, data, self.chunknum,
-                                          flag_filter_validation=self.flag_filter_validation,
-                                          snr_cut_validation=self.snr_cut_validation)
+        convertDESCcatChunk(delightparamfilechunk, data, self.chunknum)
+                                          
 
         # template fitting for that chunk
-        templateFitting(delightparamfilechunk)
+        #templateFitting(delightparamfilechunk)
+        templateFittingh5(delightparamfilechunk)
 
         # estimation for that chunk
-        delightApply(delightparamfilechunk)
+        #delightApply(delightparamfilechunk)
+        delightApplyh5(delightparamfilechunk)
 
         # allow for either format for now
         try:
@@ -306,8 +303,20 @@ class DelightEstimator(CatEstimator):
 
         numzs = len(d)
 
-        zmode, pdfs = getDelightRedshiftEstimation(delightparamfilechunk,
-                                                   self.chunknum, numzs, indexes_sel)
+        # there is no filtering if test data, thus no need to provide numz.
+        # note there are two evaluation one in Template Fitting and one in DelightApply.
+        # By now we return the Gaussian Process results
+        zmode, pdfs = getDelightRedshiftEstimationh5(delightparamfilechunk,
+                                                   self.chunknum,prefix="gp_pdfs_")
+
+        # but we could also ask for the Template fitting:
+        # zmode, pdfs = getDelightRedshiftEstimationh5(delightparamfilechunk,
+        #                                           self.chunknum,prefix="temp_pdfs_")    
+        # The selection between the two types of results may be done inside  
+        # getDelightRedshiftEstimationh5
+
+        # For the moment, we use GP only
+                                               
         zmode = np.round(zmode, 3)
 
         qp_d = qp.Ensemble(qp.interp, data=dict(xvals=self.zgrid,
